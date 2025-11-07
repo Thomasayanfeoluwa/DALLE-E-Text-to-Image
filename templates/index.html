@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stability AI Async Image Generator</title>
+</head>
+<body>
+    <h1>Generate Image</h1>
+    <input type="text" id="prompt" placeholder="Enter prompt" style="width:300px;">
+    <button onclick="generateImage()">Generate</button>
+    <br><br>
+    <img id="result" style="max-width:512px; max-height:512px;" />
+
+    <script>
+    async function generateImage() {
+        const prompt = document.getElementById("prompt").value.trim();
+        if (!prompt) { alert("Enter a prompt"); return; }
+
+        const response = await fetch('/generateimages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: prompt })
+        });
+        const data = await response.json();
+        if (data.image) {
+            document.getElementById("result").src = data.image;
+        } else {
+            alert(data.error);
+        }
+    }
+    </script>
+</body>
+</html>
